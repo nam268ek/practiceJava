@@ -77,23 +77,23 @@ public class TestGiaoDich {
 		int choise = sc.nextInt();
 		GiaoDich gd = null;
 		switch (choise) {
-		case 1:
-			sc.nextLine();
-			System.out.println("Loại vàng: ");
-			while (!sc.hasNextLine()) {
-				System.out.println("Sai định dạng. Vui lòng nhập lại !");
-				sc.next();
-			}
-			String loaiVang = sc.nextLine();
-			gd = new GiaoDichVang(maGD, ngayNhap, donGia, soLuong, loaiVang);
-			break;
-		case 2:
-			System.out.println("Nhập tỉ giá: ");
-			double tiGia = sc.nextDouble();
-			System.out.println("Loại tiền(USD, Euro, VND): ");
-			String loaiTienTe = sc.nextLine().trim();
-			gd = new GiaoDichTienTe(maGD, ngayNhap, donGia, soLuong, tiGia, loaiTienTe);
-			break;
+			case 1:
+				sc.nextLine();
+				System.out.println("Loại vàng: ");
+				while (!sc.hasNextLine()) {
+					System.out.println("Sai định dạng. Vui lòng nhập lại !");
+					sc.next();
+				}
+				String loaiVang = sc.nextLine();
+				gd = new GiaoDichVang(maGD, ngayNhap, donGia, soLuong, loaiVang);
+				break;
+			case 2:
+				System.out.println("Nhập tỉ giá: ");
+				double tiGia = sc.nextDouble();
+				System.out.println("Loại tiền(USD, Euro, VND): ");
+				String loaiTienTe = sc.nextLine().trim();
+				gd = new GiaoDichTienTe(maGD, ngayNhap, donGia, soLuong, tiGia, loaiTienTe);
+				break;
 		}
 		return gd;
 	}
@@ -115,11 +115,13 @@ public class TestGiaoDich {
 		System.out.println("5.Thoát.");
 		System.out.println("Lựa chọn:");
 	}
+
 	public static void xuatDS() {
-		for(GiaoDich obj : dsGD.xuatAllDS()) {
+		for (GiaoDich obj : dsGD.xuatAllDS()) {
 			System.out.println(obj);
 		}
 	}
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		dsGD = new DanhSachGiaoDich();
@@ -131,114 +133,120 @@ public class TestGiaoDich {
 		int choise = sc.nextInt();
 		while (choise != 5) {
 			switch (choise) {
-			case 1:
-				nhapcung();
-//				GiaoDich gd = InputGD();
-//				dsGD.addGiaoDich(gd);
-				break;
-			case 2:
-				System.out.println("Danh Sách trước khi xóa:");
-				title();
-				xuatDS();
-				sc.nextLine();
-				System.out.println("Nhập ID");
-				String key = sc.nextLine();
-				boolean status = dsGD.deleteGiaoDich(dsGD.searchGiaoDich(key));
-				if (status) {
-					System.out.println("Xóa thành công !");
-					System.out.println("Danh sách sau khi xóa:");
+				case 1:
+					nhapcung();
+					GiaoDich newGd = InputGD();
+					boolean status = dsGD.addGiaoDich(newGd);
+					if (status) {
+						System.out.println("Thêm thành công.");
+						title();
+						xuatDS();
+					} else {
+						System.out.println("Thêm không thành công.");
+					}
+					break;
+				case 2:
+					System.out.println("Danh Sách trước khi xóa:");
 					title();
 					xuatDS();
-				}									
-				else
-					System.out.println("Lỗi !");
-				break;
-			case 3:
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-				Calendar ngayNhap = null;
-				System.out.println("Danh sách trước khi sửa:");
-				title();
-				xuatDS();
-				System.out.println("Nhập ID:");
-				String id = sc.nextLine();
-				GiaoDich gd = dsGD.searchGiaoDich(id);
-				if (gd != null) {
-					System.out.println("Nhập số lượng: ");
-					int soLuong = sc.nextInt();
-					try {
-						System.out.println("Ngày nhập(dd/MM/yyyy):");
-						String time = sc.next();
-						while (dsGD.CheckValidate(time) == false) {
-							time = sc.next();
+					sc.nextLine();
+					System.out.println("Nhập ID");
+					String key = sc.nextLine();
+					status = dsGD.deleteGiaoDich(dsGD.searchGiaoDich(key));
+					if (status) {
+						System.out.println("Xóa thành công !");
+						System.out.println("Danh sách sau khi xóa:");
+						title();
+						xuatDS();
+					} else
+						System.out.println("Lỗi !");
+					break;
+				case 3:
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					Calendar ngayNhap = null;
+					System.out.println("Danh sách trước khi sửa:");
+					title();
+					xuatDS();
+					System.out.println("Nhập ID:");
+					String id = sc.nextLine();
+					GiaoDich gd = dsGD.searchGiaoDich(id);
+					if (gd != null) {
+						System.out.println("Nhập số lượng: ");
+						int soLuong = sc.nextInt();
+						try {
+							System.out.println("Ngày nhập(dd/MM/yyyy):");
+							String time = sc.next();
+							while (dsGD.CheckValidate(time) == false) {
+								time = sc.next();
+							}
+							Date date = dateFormat.parse(time); // Convert String to Date
+							ngayNhap = dsGD.dateToCalendar(date); // Convert Date to Calendar
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						Date date = dateFormat.parse(time); // Convert String to Date
-						ngayNhap = dsGD.dateToCalendar(date); // Convert Date to Calendar
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					System.out.println("Nhập đơn giá:");
-					while (!sc.hasNextDouble()) {
-						System.out.println("Vui lòng nhập đúng định dạng !");
-						sc.next();
-					}
-					double donGia = sc.nextDouble();
-					while (donGia <= 0) {
-						System.out.println("Đơn giá > 0. Vui lòng nhập lại !");
-						donGia = sc.nextDouble();
+						System.out.println("Nhập đơn giá:");
+						while (!sc.hasNextDouble()) {
+							System.out.println("Vui lòng nhập đúng định dạng !");
+							sc.next();
+						}
+						double donGia = sc.nextDouble();
+						while (donGia <= 0) {
+							System.out.println("Đơn giá > 0. Vui lòng nhập lại !");
+							donGia = sc.nextDouble();
 
-					}
+						}
 
-					System.out.println(
-							"Nhập loại giao dịch:\n" + "1.Giao dịch vàng\n" + "2.Giao dịch tiền tệ\n" + "Lựa chọn: ");
-					while (!sc.hasNextInt()) {
-						System.out.println("Sai định dạng. Vui lòng nhập lại !");
-						sc.next();
-					}
-					int choise1 = sc.nextInt();
-					// GiaoDich gd1 = null;
-					switch (choise1) {
-					case 1:
-						sc.nextLine();
-						System.out.println("Loại vàng: ");
-						while (!sc.hasNextLine()) {
+						System.out.println("Nhập loại giao dịch:\n" + "1.Giao dịch vàng\n" + "2.Giao dịch tiền tệ\n"
+								+ "Lựa chọn: ");
+						while (!sc.hasNextInt()) {
 							System.out.println("Sai định dạng. Vui lòng nhập lại !");
 							sc.next();
 						}
-						String loaiVang = sc.nextLine();
-						gd = new GiaoDichVang(id, ngayNhap, donGia, soLuong, loaiVang);
-						break;
-					case 2:
-						System.out.println("Nhập tỉ giá: ");
-						double tiGia = sc.nextDouble();
-						System.out.println("Loại tiền(USD, Euro, VND): ");
-						String loaiTienTe = sc.nextLine().trim();
-						gd = new GiaoDichTienTe(id, ngayNhap, donGia, soLuong, tiGia, loaiTienTe);
-						break;
+						int choise1 = sc.nextInt();
+						// GiaoDich gd1 = null;
+						switch (choise1) {
+							case 1:
+								sc.nextLine();
+								System.out.println("Loại vàng: ");
+								while (!sc.hasNextLine()) {
+									System.out.println("Sai định dạng. Vui lòng nhập lại !");
+									sc.next();
+								}
+								String loaiVang = sc.nextLine();
+								gd = new GiaoDichVang(id, ngayNhap, donGia, soLuong, loaiVang);
+								break;
+							case 2:
+								System.out.println("Nhập tỉ giá: ");
+								double tiGia = sc.nextDouble();
+								System.out.println("Loại tiền(USD, Euro, VND): ");
+								String loaiTienTe = sc.nextLine().trim();
+								gd = new GiaoDichTienTe(id, ngayNhap, donGia, soLuong, tiGia, loaiTienTe);
+								break;
+						}
+
 					}
-					
-				}
-				System.out.println("Danh sách sau khi sửa:");
-				title();
-				xuatDS();
-				status = dsGD.suaGiaoDich(gd);
-				if (status)
-					System.out.println("Thành công !");
-				else
-					System.out.println("Lỗi !");
-				break;
-			case 4:
-				sc.nextLine();
-				System.out.println("Nhap ID:");
-				id = sc.nextLine().trim();
-				GiaoDich temp = dsGD.searchGiaoDich(id);
-				title();
-				System.out.println(temp);
-				if (temp != null)
-					System.out.println("Thành công !");
-				else
-					System.out.println("Lỗi !");
-				break;
+					System.out.println("Danh sách sau khi sửa:");
+					title();
+					xuatDS();
+					status = dsGD.suaGiaoDich(gd);
+					if (status)
+						System.out.println("Thành công !");
+					else
+						System.out.println("Lỗi !");
+					break;
+				case 4:
+					sc.nextLine();
+					System.out.println("Nhap ID:");
+					id = sc.nextLine().trim();
+					GiaoDich temp = dsGD.searchGiaoDich(id);
+					title();
+					System.out.println(temp);
+					if (temp != null)
+						System.out.println("Thành công !");
+					else
+						System.out.println("Lỗi !");
+					break;
 			}
 			menu();
 			choise = sc.nextInt();
