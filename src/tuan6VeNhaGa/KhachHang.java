@@ -1,10 +1,12 @@
 package tuan6VeNhaGa;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class KhachHang {
+public class KhachHang implements Serializable {
 	private String soCmnd, tenKh, gaDen;
 	private double giaTien;
+	private static final long serialVersionUID = 1L;
 
 	public String getSoCmnd() {
 		return soCmnd;
