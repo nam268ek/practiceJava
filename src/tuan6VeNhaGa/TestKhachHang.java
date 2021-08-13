@@ -139,7 +139,7 @@ public class TestKhachHang {
                 case 5:
                     System.out.println("Số khách hàng đang chờ mua vé: " + dsKh.listKh.size() + " khách hàng");
                     System.out.println("Số khách hàng đã bán vé: " + dsKh.khMuaVe + " khách hàng");
-                    System.out.println("Doanh thu bán vé: " + dsKh.doanhThu() + " VNĐ");
+                    System.out.println("Doanh thu bán vé: " + String.format("%,.1f", dsKh.doanhThu()) + " VNĐ");
                     break;
                 case 6:
                     status = dsKh.saveToFileKhChoMuaVe();
